@@ -7,26 +7,8 @@
   "https://fr.wikipedia.org/wiki/Modèle:Palette_CAC_Small"
  ],
  "non_trouvees": [
-  "Avenir Télécom",
-  "Bastide Le Confort médical",
   "European Gas Limited",
-  "Groupe Beneteau",
-  "Groupe Casino",
-  "Groupe Latecoere",
-  "Groupe Pierre & Vacances-Center Parcs",
-  "Groupe SMCP",
-  "HighCo",
-  "Jacquet Metals Service",
-  "Manitou Group",
-  "OVHcloud",
-  "Orège",
-  "Plastivaloire",
-  "Showroomprive.com",
-  "Séché Environnement",
-  "Tonnellerie François Frères",
-  "TotalEnergies Gabon",
-  "Viel & compagnie",
-  "Vranken-Pommery Monopole"
+  "Orège"
  ],
  "valeurs": [
   {
@@ -390,6 +372,22 @@
    "source": "Wikipédia"
   },
   {
+   "name": "Avenir Télécom",
+   "mnemo": "AVT",
+   "ticker": "AVT.PA",
+   "secteur": "",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Bastide Le Confort médical",
+   "mnemo": "BLC",
+   "ticker": "BLC.PA",
+   "secteur": "",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
    "name": "Bigben Interactive",
    "mnemo": "BIG",
    "ticker": "BIG.PA",
@@ -462,6 +460,22 @@
    "source": "Wikipédia"
   },
   {
+   "name": "Groupe Casino",
+   "mnemo": "CO",
+   "ticker": "CO.PA",
+   "secteur": "Consumer Defensive",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Groupe Latecoere",
+   "mnemo": "LAT",
+   "ticker": "LAT.PA",
+   "secteur": "Industrials",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
    "name": "Guerbet",
    "mnemo": "GBT",
    "ticker": "GBT.PA",
@@ -478,6 +492,14 @@
    "source": "Wikipédia"
   },
   {
+   "name": "HighCo",
+   "mnemo": "HCO",
+   "ticker": "HCO.PA",
+   "secteur": "",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
    "name": "Innate Pharma",
    "mnemo": "IPH",
    "ticker": "IPH.PA",
@@ -490,6 +512,14 @@
    "mnemo": "IVA",
    "ticker": "IVA.PA",
    "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Jacquet Metals Service",
+   "mnemo": "JCQ",
+   "ticker": "JCQ.PA",
+   "secteur": "",
    "poids": null,
    "source": "Wikipédia"
   },
@@ -574,10 +604,26 @@
    "source": "Wikipédia"
   },
   {
+   "name": "Plastivaloire",
+   "mnemo": "PVL",
+   "ticker": "PVL.PA",
+   "secteur": "",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
    "name": "Poxel",
    "mnemo": "POXEL",
    "ticker": "POXEL.PA",
    "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Showroomprive.com",
+   "mnemo": "SRP",
+   "ticker": "SRP.PA",
+   "secteur": "Consumer Cyclical",
    "poids": null,
    "source": "Wikipédia"
   },
@@ -594,6 +640,14 @@
    "mnemo": "S30",
    "ticker": "S30.PA",
    "secteur": "Technology",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Tonnellerie François Frères",
+   "mnemo": "TFF",
+   "ticker": "TFF.PA",
+   "secteur": "",
    "poids": null,
    "source": "Wikipédia"
   },
@@ -626,6 +680,14 @@
    "mnemo": "VLTSA",
    "ticker": "VLTSA.PA",
    "secteur": "Utilities",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Vranken-Pommery Monopole",
+   "mnemo": "VRAP",
+   "ticker": "VRAP.PA",
+   "secteur": "",
    "poids": null,
    "source": "Wikipédia"
   },
