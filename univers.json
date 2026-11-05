@@ -3,9 +3,31 @@
  "indice": "CAC Small",
  "composition_au": "2026-09-30",
  "sources": [
-  "https://live.euronext.com/sites/default/files/documentation/index-composition/CAC_Small_Index_Composition.pdf"
+  "https://live.euronext.com/sites/default/files/documentation/index-composition/CAC_Small_Index_Composition.pdf",
+  "https://fr.wikipedia.org/wiki/Modèle:Palette_CAC_Small"
  ],
- "non_trouvees": [],
+ "non_trouvees": [
+  "Avenir Télécom",
+  "Bastide Le Confort médical",
+  "European Gas Limited",
+  "Groupe Beneteau",
+  "Groupe Casino",
+  "Groupe Latecoere",
+  "Groupe Pierre & Vacances-Center Parcs",
+  "Groupe SMCP",
+  "HighCo",
+  "Jacquet Metals Service",
+  "Manitou Group",
+  "OVHcloud",
+  "Orège",
+  "Plastivaloire",
+  "Showroomprive.com",
+  "Séché Environnement",
+  "Tonnellerie François Frères",
+  "TotalEnergies Gabon",
+  "Viel & compagnie",
+  "Vranken-Pommery Monopole"
+ ],
  "valeurs": [
   {
    "name": "Tikehau Capital",
@@ -302,6 +324,318 @@
    "secteur": "Energy",
    "poids": 1.03,
    "source": "Euronext"
+  },
+  {
+   "name": "ABEO",
+   "mnemo": "ABEO",
+   "ticker": "ABEO.PA",
+   "secteur": "Consumer Cyclical",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "AB Science",
+   "mnemo": "AB",
+   "ticker": "AB.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Abionyx Pharma",
+   "mnemo": "ABNX",
+   "ticker": "ABNX.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Adocia",
+   "mnemo": "ADOC",
+   "ticker": "ADOC.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Akwel",
+   "mnemo": "AKW",
+   "ticker": "AKW.PA",
+   "secteur": "Consumer Cyclical",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Aramis Group",
+   "mnemo": "ARAMI",
+   "ticker": "ARAMI.PA",
+   "secteur": "Consumer Cyclical",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "ArtMarket.com",
+   "mnemo": "PRC",
+   "ticker": "PRC.PA",
+   "secteur": "Communication Services",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Ateme",
+   "mnemo": "ATEME",
+   "ticker": "ATEME.PA",
+   "secteur": "Technology",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Bigben Interactive",
+   "mnemo": "BIG",
+   "ticker": "BIG.PA",
+   "secteur": "Technology",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Bonduelle",
+   "mnemo": "BON",
+   "ticker": "BON.PA",
+   "secteur": "Consumer Defensive",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "EPC Groupe",
+   "mnemo": "EXPL",
+   "ticker": "EXPL.PA",
+   "secteur": "Basic Materials",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Ekinops",
+   "mnemo": "EKI",
+   "ticker": "EKI.PA",
+   "secteur": "Technology",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Equasens",
+   "mnemo": "EQS",
+   "ticker": "EQS.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Euroapi",
+   "mnemo": "EAPI",
+   "ticker": "EAPI.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Figeac Aero",
+   "mnemo": "FGA",
+   "ticker": "FGA.PA",
+   "secteur": "Industrials",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "GenSight Biologics",
+   "mnemo": "SIGHT",
+   "ticker": "SIGHT.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Genfit",
+   "mnemo": "GNFT",
+   "ticker": "GNFT.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Guerbet",
+   "mnemo": "GBT",
+   "ticker": "GBT.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Guillemot Corporation",
+   "mnemo": "GUI",
+   "ticker": "GUI.PA",
+   "secteur": "Technology",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Innate Pharma",
+   "mnemo": "IPH",
+   "ticker": "IPH.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Inventiva",
+   "mnemo": "IVA",
+   "ticker": "IVA.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Lacroix",
+   "mnemo": "LACR",
+   "ticker": "LACR.PA",
+   "secteur": "Technology",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Lhyfe",
+   "mnemo": "ALHYF",
+   "ticker": "ALHYF.PA",
+   "secteur": "",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Linedata",
+   "mnemo": "LIN",
+   "ticker": "LIN.PA",
+   "secteur": "Technology",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "MaaT Pharma",
+   "mnemo": "MAAT",
+   "ticker": "MAAT.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Maisons du Monde",
+   "mnemo": "MDM",
+   "ticker": "MDM.PA",
+   "secteur": "Consumer Cyclical",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Maurel & Prom",
+   "mnemo": "MAU",
+   "ticker": "MAU.PA",
+   "secteur": "Energy",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Mersen",
+   "mnemo": "MRN",
+   "ticker": "MRN.PA",
+   "secteur": "Industrials",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Nacon",
+   "mnemo": "NACON",
+   "ticker": "NACON.PA",
+   "secteur": "Communication Services",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Ose Immunotherapeutics",
+   "mnemo": "OSE",
+   "ticker": "OSE.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Parrot",
+   "mnemo": "PARRO",
+   "ticker": "PARRO.PA",
+   "secteur": "Technology",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Poxel",
+   "mnemo": "POXEL",
+   "ticker": "POXEL.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Solocal",
+   "mnemo": "LOCAL",
+   "ticker": "LOCAL.PA",
+   "secteur": "Communication Services",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Solutions 30",
+   "mnemo": "S30",
+   "ticker": "S30.PA",
+   "secteur": "Technology",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Transgene",
+   "mnemo": "TNG",
+   "ticker": "TNG.PA",
+   "secteur": "Healthcare",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Vantiva",
+   "mnemo": "VANTI",
+   "ticker": "VANTI.PA",
+   "secteur": "Communication Services",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Verimatrix",
+   "mnemo": "VMX",
+   "ticker": "VMX.PA",
+   "secteur": "Technology",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Voltalia",
+   "mnemo": "VLTSA",
+   "ticker": "VLTSA.PA",
+   "secteur": "Utilities",
+   "poids": null,
+   "source": "Wikipédia"
+  },
+  {
+   "name": "Waga Energy",
+   "mnemo": "WAGA",
+   "ticker": "WAGA.PA",
+   "secteur": "Industrials",
+   "poids": null,
+   "source": "Wikipédia"
   }
  ]
 }
