@@ -10,7 +10,7 @@
   "selection": {
     "score_achat": 4,
     "score_surveiller": 2,
-    "max_achat": 5,
+    "max_achat": 10,
     "max_surveiller": 5
   },
   "seuils": {
