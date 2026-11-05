@@ -45,7 +45,7 @@ def _card(s: Stock, chart: str) -> str:
     kpis = [
         _kpi("Jour", sgn(s.day_pct, 2), col(s.day_pct)),
         _kpi("1 mois", sgn(s.perf_1m), col(s.perf_1m)),
-        _kpi("3 mois vs CAC", f"{s.rs_3m:+.1f} pts".replace(".", ","), col(s.rs_3m)),
+        _kpi("3 mois vs indice", f"{s.rs_3m:+.1f} pts".replace(".", ","), col(s.rs_3m)),
         _kpi("RSI 14", f"{s.rsi14:.0f}"),
     ]
     kpis2 = [
@@ -86,7 +86,8 @@ def _card(s: Stock, chart: str) -> str:
 
 
 def build(selected: list[Stock], ctx: dict, n_total: int, errors: list[str], now: datetime,
-          chart: Callable[[Stock], str], interactive: bool = False) -> str:
+          chart: Callable[[Stock], str], interactive: bool = False, title: str = "CAC Small",
+          n_illiquid: int = 0) -> str:
     """chart(s) renvoie le code HTML du graphique de la valeur s (image ou graphique interactif)."""
     buys = [s for s in selected if s.category == "achat"]
     watch = [s for s in selected if s.category == "surveiller"]
@@ -94,10 +95,10 @@ def build(selected: list[Stock], ctx: dict, n_total: int, errors: list[str], now
     market = ""
     if "last" in ctx:
         trend = "au-dessus" if ctx["above200"] else "en dessous"
-        market = (f"CAC 40 : <b>{num(ctx['last'])}</b> "
+        market = (f"{escape(ctx['name'])} : "
                   f"<span style='color:{col(ctx['day'])}'>{sgn(ctx['day'], 2)}</span> aujourd'hui, "
                   f"{sgn(ctx['perf_1m'])} sur 1 mois, {trend} de sa MM200. ")
-    market += f"{ctx['breadth']:.0f} % des valeurs du CAC sont au-dessus de leur MM200."
+    market += f"{ctx['breadth']:.0f} % des valeurs analysées sont au-dessus de leur MM200."
     prudence = ""
     if ctx.get("prudence"):
         prudence = ("<p style='margin:10px 0 0;padding:10px 12px;background:#fff8ec;border-left:3px solid #d98a1c;"
@@ -116,11 +117,12 @@ def build(selected: list[Stock], ctx: dict, n_total: int, errors: list[str], now
     body += section("À surveiller", watch,
                     "Configuration intéressante mais pas encore confirmée : à garder à l'œil les prochains jours.")
     if not selected:
-        body = ("<p style='margin:24px 0;padding:16px;background:#f6f7fa;border-radius:10px'>Aucune valeur du CAC 40 "
+        body = ("<p style='margin:24px 0;padding:16px;background:#f6f7fa;border-radius:10px'>Aucune valeur "
                 "ne présente de configuration convaincante ce soir. Pas d'achat à envisager : rester patient.</p>")
 
     err = (f"<p style='color:{DOWN};font-size:12px'>Valeurs non récupérées : {escape(', '.join(errors))}</p>"
            if errors else "")
+    illiq = (f" (dont {n_illiquid} avec une configuration mais trop peu échangées)" if n_illiquid else "")
     if not selected:
         hint = ""
     elif interactive:
@@ -130,15 +132,15 @@ def build(selected: list[Stock], ctx: dict, n_total: int, errors: list[str], now
         hint = (f"<p style='margin:10px 0 0;font-size:12px;color:{MUTED}'>Graphiques interactifs (cours exact à chaque "
                 "date) : télécharge la pièce jointe et ouvre-la dans ton navigateur.</p>")
     return f"""<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>Screener CAC 40 du {now:%d/%m/%Y}</title></head>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Screener {escape(title)} du {now:%d/%m/%Y}</title></head>
 <body style="margin:0;background:#f6f7fa">
 <div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:{INK};max-width:640px;margin:0 auto;padding:20px 14px;font-size:14px;line-height:1.45">
-<h2 style="margin:0 0 4px">Screener CAC 40 : {now:%d/%m/%Y}</h2>
-<p style="margin:0 0 12px;color:{MUTED}">{n_total} valeurs analysées · <b style="color:{INK}">{len(buys)} achat(s) à étudier</b>, {len(watch)} à surveiller · les autres sont écartées</p>
+<h2 style="margin:0 0 4px">Screener {escape(title)} : {now:%d/%m/%Y}</h2>
+<p style="margin:0 0 12px;color:{MUTED}">{n_total} valeurs analysées · <b style="color:{INK}">{len(buys)} achat(s) à étudier</b>, {len(watch)} à surveiller · les autres sont écartées{illiq}</p>
 <p style="margin:0;font-size:13px">{market}</p>{prudence}{hint}
 {body}{err}
 <p style="margin-top:22px;font-size:12px;color:#8a93a6">Sélection automatique à partir d'indicateurs techniques (MM50/MM200, RSI, MACD, volumes,
-force relative) et du consensus des analystes (Yahoo Finance). Le stop est placé à 2 ATR sous le cours, l'objectif reprend le consensus
+force relative, liquidité) et du consensus des analystes (Yahoo Finance). Le stop est placé à 2 ATR sous le cours, l'objectif reprend le consensus
 ou vise 2 fois le risque. Ce ne sont pas des conseils financiers : vérifie l'actualité avant tout achat.</p>
 </div>{SCRIPT if interactive and selected else ""}</body></html>"""
 

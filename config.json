@@ -1,56 +1,18 @@
 {
-  "_aide": "Composition du CAC 40 au 30/09/2026 (Eiffage a remplacé Edenred le 22/12/2025). Euronext révise l'indice en mars, juin, septembre et décembre : mets la liste à jour si une valeur entre ou sort. Tickers Yahoo Finance.",
-  "indice": {"ticker": "^FCHI", "name": "CAC 40"},
-  "univers": [
-    {"ticker": "AC.PA",    "name": "Accor"},
-    {"ticker": "AI.PA",    "name": "Air Liquide"},
-    {"ticker": "AIR.PA",   "name": "Airbus"},
-    {"ticker": "MT.AS",    "name": "ArcelorMittal"},
-    {"ticker": "CS.PA",    "name": "AXA"},
-    {"ticker": "BNP.PA",   "name": "BNP Paribas"},
-    {"ticker": "EN.PA",    "name": "Bouygues"},
-    {"ticker": "BVI.PA",   "name": "Bureau Veritas"},
-    {"ticker": "CAP.PA",   "name": "Capgemini"},
-    {"ticker": "CA.PA",    "name": "Carrefour"},
-    {"ticker": "ACA.PA",   "name": "Crédit Agricole"},
-    {"ticker": "BN.PA",    "name": "Danone"},
-    {"ticker": "DSY.PA",   "name": "Dassault Systèmes"},
-    {"ticker": "FGR.PA",   "name": "Eiffage"},
-    {"ticker": "ENGI.PA",  "name": "Engie"},
-    {"ticker": "EL.PA",    "name": "EssilorLuxottica"},
-    {"ticker": "ERF.PA",   "name": "Eurofins Scientific"},
-    {"ticker": "ENX.PA",   "name": "Euronext"},
-    {"ticker": "RMS.PA",   "name": "Hermès"},
-    {"ticker": "KER.PA",   "name": "Kering"},
-    {"ticker": "OR.PA",    "name": "L'Oréal"},
-    {"ticker": "LR.PA",    "name": "Legrand"},
-    {"ticker": "MC.PA",    "name": "LVMH"},
-    {"ticker": "ML.PA",    "name": "Michelin"},
-    {"ticker": "ORA.PA",   "name": "Orange"},
-    {"ticker": "RI.PA",    "name": "Pernod Ricard"},
-    {"ticker": "PUB.PA",   "name": "Publicis"},
-    {"ticker": "RNO.PA",   "name": "Renault"},
-    {"ticker": "SAF.PA",   "name": "Safran"},
-    {"ticker": "SGO.PA",   "name": "Saint-Gobain"},
-    {"ticker": "SAN.PA",   "name": "Sanofi"},
-    {"ticker": "SU.PA",    "name": "Schneider Electric"},
-    {"ticker": "GLE.PA",   "name": "Société Générale"},
-    {"ticker": "STLAP.PA", "name": "Stellantis"},
-    {"ticker": "STMPA.PA", "name": "STMicroelectronics"},
-    {"ticker": "HO.PA",    "name": "Thales"},
-    {"ticker": "TTE.PA",   "name": "TotalEnergies"},
-    {"ticker": "URW.PA",   "name": "Unibail-Rodamco-Westfield"},
-    {"ticker": "VIE.PA",   "name": "Veolia"},
-    {"ticker": "DG.PA",    "name": "Vinci"}
-  ],
-
+  "_aide": "Réglages du screener. La liste des valeurs est dans univers.json, mise à jour automatiquement chaque lundi depuis Euronext et Wikipédia (workflow « Mise à jour de la composition du CAC Small »).",
+  "indice": {
+    "name": "CAC Small",
+    "ticker": null,
+    "ref_court": "le CAC Small (moyenne)",
+    "_aide": "Yahoo Finance ne publie pas l'indice CAC Small : ticker vide = moyenne équipondérée des valeurs."
+  },
+  "univers_fichier": "univers.json",
   "selection": {
     "score_achat": 4,
     "score_surveiller": 2,
     "max_achat": 5,
     "max_surveiller": 5
   },
-
   "seuils": {
     "rsi_survente": 30,
     "rsi_surachat": 72,
@@ -59,6 +21,8 @@
     "volume_cassure": 1.5,
     "mouvement_fort_pct": 6,
     "resultats_jours": 10,
-    "stop_atr": 2.0
+    "stop_atr": 2.0,
+    "liquidite_min_eur": 150000,
+    "analystes_min": 3
   }
 }

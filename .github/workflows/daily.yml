@@ -1,4 +1,4 @@
-name: Screener CAC 40 quotidien
+name: Screener CAC Small quotidien
 
 on:
   schedule:

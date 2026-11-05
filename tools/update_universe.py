@@ -1,9 +1,14 @@
-"""Met à jour la liste des valeurs de l'indice à partir du PDF de composition publié par Euronext.
+"""Met à jour la liste des valeurs du CAC Small (univers.json).
+
+Deux sources publiques, combinées :
+1. le PDF de composition d'Euronext : source officielle, mais la version gratuite ne donne
+   que les plus grosses valeurs (~37, plus de 80 % du poids de l'indice). Il est lu colonne
+   par colonne grâce à la position des mots sous « Company », « MNEMO », « Sector », « Weight » ;
+2. le modèle Wikipédia « Palette CAC Small », qui liste les autres sociétés de l'indice.
+   Les noms sont convertis en tickers Yahoo Finance (.PA) avec la recherche de Yahoo.
 
 Usage : python tools/update_universe.py [--pdf fichier.pdf]
-Écrit univers.json (nom, mnémonique, ticker Yahoo, secteur, poids) et n'y touche pas
-si la lecture du PDF semble incomplète. Le PDF est lu colonne par colonne grâce à la
-position des mots sous les en-têtes « Company », « MNEMO », « Sector », « Weight »."""
+univers.json n'est pas modifié si la lecture semble incomplète."""
 from __future__ import annotations
 
 import argparse
@@ -17,7 +22,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 URL = "https://live.euronext.com/sites/default/files/documentation/index-composition/CAC_Small_Index_Composition.pdf"
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130 Safari/537.36"}
-MIN_VALUES = 80                       # en dessous, on considère la lecture ratée
+MIN_OFFICIAL = 20                     # en dessous, on considère la lecture du PDF ratée
+WIKI_API = "https://fr.wikipedia.org/w/api.php"
+WIKI_TEMPLATE = "Modèle:Palette CAC Small"
+NOT_COMPANIES = re.compile(r"^(CAC|SBF|Euronext|Indice|Portail|Bourse|Liste|France)\b", re.I)
 MOIS_EN = ["january", "february", "march", "april", "may", "june", "july", "august",
            "september", "october", "november", "december"]
 
@@ -87,25 +95,82 @@ def parse(pdf_bytes: bytes) -> tuple[list[dict], str]:
     return uniq, as_of
 
 
+def wikipedia_names() -> list[str]:
+    """Titres des articles liés depuis le modèle « Palette CAC Small » de Wikipédia."""
+    import requests
+    r = requests.get(WIKI_API, headers=UA, timeout=30, params={
+        "action": "parse", "page": WIKI_TEMPLATE, "prop": "links", "format": "json", "formatversion": 2})
+    r.raise_for_status()
+    links = r.json().get("parse", {}).get("links", [])
+    names = [l["title"] for l in links if l.get("ns") == 0 and l.get("exists", True)]
+    return [re.sub(r"\s*\(.*?\)$", "", n) for n in names if not NOT_COMPANIES.match(n)]
+
+
+def yahoo_ticker(name: str) -> tuple[str, str] | None:
+    """Cherche le ticker Paris (.PA) d'une société par son nom via la recherche Yahoo Finance."""
+    import yfinance as yf
+    try:
+        quotes = yf.Search(name, max_results=10, news_count=0).quotes
+    except Exception as e:
+        print(f"  recherche « {name} » en échec : {e}", file=sys.stderr)
+        return None
+    for q in quotes:
+        sym = q.get("symbol", "")
+        if sym.endswith(".PA") and q.get("quoteType") == "EQUITY":
+            return sym, q.get("sector") or q.get("sectorDisp") or ""
+    return None
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--pdf", help="lire un PDF local plutôt que le télécharger")
     args = ap.parse_args()
+
     raw = Path(args.pdf).read_bytes() if args.pdf else download()
-    values, as_of = parse(raw)
-    for v in values:
-        print(f"{v['ticker']:10} {v['name'][:40]:40} {v['secteur'][:30]:30} {v['poids']}")
-    print(f"{len(values)} valeurs lues (composition au {as_of or 'date inconnue'})")
-    if len(values) < MIN_VALUES:
-        print("Lecture incomplète : univers.json n'est pas modifié.", file=sys.stderr)
+    official, as_of = parse(raw)
+    for v in official:
+        v["source"] = "Euronext"
+    print(f"Euronext : {len(official)} valeurs lues (composition au {as_of or 'date inconnue'})")
+    if len(official) < MIN_OFFICIAL:
+        print("Lecture du PDF incomplète : univers.json n'est pas modifié.", file=sys.stderr)
         import pdfplumber
         with pdfplumber.open(io.BytesIO(raw)) as pdf:
             print("--- début du PDF, pour diagnostic ---\n" + (pdf.pages[0].extract_text() or "")[:3000])
         return 1
+
+    values = list(official)
+    known = {v["ticker"] for v in values}
+    try:
+        names = wikipedia_names()
+    except Exception as e:
+        names = []
+        print(f"Wikipédia indisponible ({e}) : seules les valeurs Euronext sont retenues.", file=sys.stderr)
+    print(f"Wikipédia : {len(names)} sociétés")
+    unresolved = []
+    for n in names:
+        found = yahoo_ticker(n)
+        if not found:
+            unresolved.append(n)
+            continue
+        tk, sector = found
+        if tk in known:
+            continue
+        known.add(tk)
+        values.append({"name": n, "mnemo": tk[:-3], "ticker": tk, "secteur": sector, "poids": None,
+                       "source": "Wikipédia"})
+
+    for v in values:
+        print(f"{v['ticker']:10} {v['name'][:38]:38} {v['secteur'][:24]:24} {v['source']}")
+    if unresolved:
+        print(f"Sans ticker Paris trouvé ({len(unresolved)}) : {', '.join(unresolved)}")
+    print(f"Total : {len(values)} valeurs")
+
     dest = ROOT / "univers.json"
-    doc = {"_aide": "Généré automatiquement depuis le PDF de composition d'Euronext par tools/update_universe.py. "
-                    "Ne pas modifier à la main : la mise à jour hebdomadaire écraserait les changements.",
-           "indice": "CAC Small", "source": URL, "composition_au": as_of, "valeurs": values}
+    doc = {"_aide": "Généré automatiquement par tools/update_universe.py (workflow hebdomadaire). "
+                    "Ne pas modifier à la main : la prochaine mise à jour écraserait les changements.",
+           "indice": "CAC Small", "composition_au": as_of,
+           "sources": [URL, f"https://fr.wikipedia.org/wiki/{WIKI_TEMPLATE.replace(' ', '_')}"],
+           "non_trouvees": unresolved, "valeurs": values}
     dest.write_text(json.dumps(doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"Écrit : {dest}")
     return 0

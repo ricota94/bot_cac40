@@ -45,7 +45,7 @@ class Stock:
     perf_3m: float
     perf_6m: float
     perf_1y: float
-    rs_3m: float                   # surperformance 3 mois vs CAC 40, en points
+    rs_3m: float                   # surperformance 3 mois vs indice de référence, en points
     rsi14: float
     sma20: float
     sma50: float
@@ -54,6 +54,7 @@ class Stock:
     high_52w: float
     low_52w: float
     vol_ratio: float               # volume du jour / moyenne 20 séances
+    turnover: float                # capitaux échangés en moyenne par séance (20 j), en euros
     atr14: float
     as_of: date
     setups: list[str] = field(default_factory=list)
@@ -86,6 +87,7 @@ def compute(df: pd.DataFrame, meta: dict, idx_perf_3m: float) -> Stock:
         sma200=float(sma200.iloc[-1]), sma200_up=bool(sma200.iloc[-1] > sma200.iloc[-21]),
         high_52w=float(year["High"].max()), low_52w=float(year["Low"].min()),
         vol_ratio=float(v.iloc[-1]) / vol_avg if vol_avg else 1.0, atr14=atr(df),
+        turnover=float((c * v).iloc[-21:-1].mean()),
         as_of=pd.Timestamp(df.index[-1]).date(),
     )
 
@@ -148,10 +150,11 @@ def detect_setups(s: Stock, df: pd.DataFrame, cfg: dict) -> None:
         return
 
     # Bonus / malus de contexte, appliqués uniquement aux valeurs ayant une configuration
+    ref = cfg["indice"].get("ref_court", "l'indice")
     if s.rs_3m >= 5:
-        add(1, None, f"Surperforme le CAC 40 de {s.rs_3m:+.1f} pts sur 3 mois (force relative)")
+        add(1, None, f"Surperforme {ref} de {s.rs_3m:+.1f} pts sur 3 mois (force relative)")
     elif s.rs_3m <= -10:
-        add(-1, None, f"Sous-performe le CAC 40 de {s.rs_3m:.1f} pts sur 3 mois")
+        add(-1, None, f"Sous-performe {ref} de {s.rs_3m:.1f} pts sur 3 mois")
 
     macd = c.ewm(span=12, adjust=False).mean() - c.ewm(span=26, adjust=False).mean()
     hist = macd - macd.ewm(span=9, adjust=False).mean()
@@ -171,7 +174,7 @@ def apply_details(s: Stock, d: dict, cfg: dict, today: date) -> None:
     """Ajoute le consensus des analystes et l'agenda des résultats au score."""
     s.details = d
     tgt, n = d.get("targetMeanPrice"), d.get("numberOfAnalystOpinions") or 0
-    if tgt and n >= 5:
+    if tgt and n >= cfg["seuils"].get("analystes_min", 3):
         up = pct(tgt, s.last)
         if up >= 15:
             s.score += 1
@@ -192,7 +195,7 @@ def classify(s: Stock, cfg: dict) -> None:
     s.stop = s.last - th["stop_atr"] * s.atr14
     tgt = s.details.get("targetMeanPrice")
     s.target = tgt if tgt and tgt > s.last * 1.04 else s.last + 2 * (s.last - s.stop)
-    if not s.setups:
+    if not s.setups or s.turnover < th.get("liquidite_min_eur", 0):
         s.category = ""
     elif s.score >= sel["score_achat"] and s.last > s.sma200 and s.rsi14 <= th["rsi_surachat"]:
         s.category = "achat"
@@ -200,8 +203,19 @@ def classify(s: Stock, cfg: dict) -> None:
         s.category = "surveiller"
 
 
-def market_context(idx: pd.DataFrame | None, stocks: list[Stock]) -> dict:
-    ctx = {"breadth": sum(s.last > s.sma200 for s in stocks) / len(stocks) * 100 if stocks else 0}
+def equal_weight_index(frames: dict[str, pd.DataFrame]) -> pd.DataFrame | None:
+    """Indice maison : moyenne des variations quotidiennes de toutes les valeurs (équipondéré).
+    Sert de référence quand Yahoo Finance ne publie pas l'indice officiel (cas du CAC Small)."""
+    if not frames:
+        return None
+    rets = pd.concat({t: df["Close"].pct_change() for t, df in frames.items()}, axis=1)
+    rets = rets.clip(-0.5, 0.5).dropna(how="all").iloc[1:]
+    level = (1 + rets.mean(axis=1, skipna=True).fillna(0)).cumprod() * 1000
+    return pd.DataFrame({"Close": level})
+
+
+def market_context(idx: pd.DataFrame | None, stocks: list[Stock], name: str = "") -> dict:
+    ctx = {"name": name, "breadth": sum(s.last > s.sma200 for s in stocks) / len(stocks) * 100 if stocks else 0}
     if idx is not None and len(idx) > 200:
         c = idx["Close"]
         ctx.update(last=float(c.iloc[-1]), day=pct(float(c.iloc[-1]), float(c.iloc[-2])),

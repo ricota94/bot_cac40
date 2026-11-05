@@ -1,6 +1,6 @@
-# Screener CAC 40
+# Screener CAC Small
 
-Chaque soir de semaine, après la clôture de la Bourse de Paris, ce bot analyse les **40 valeurs du CAC 40** via l'API de Yahoo Finance et t'envoie un e-mail qui ne contient **que les valeurs qui méritent ton attention** :
+Chaque soir de semaine, après la clôture de la Bourse de Paris, ce bot analyse les valeurs du **CAC Small** (petites capitalisations de la Bourse de Paris) via l'API de Yahoo Finance et t'envoie un e-mail qui ne contient **que les valeurs qui méritent ton attention** :
 
 - **Achat à étudier** : configuration technique favorable et score élevé ;
 - **À surveiller** : configuration intéressante mais pas encore confirmée.
@@ -36,7 +36,7 @@ Dans ce dépôt : **Settings → Secrets and variables → Actions → New repos
 Les secrets sont propres à chaque dépôt : il faut les recréer ici même s'ils existent déjà dans `bot-bourse`.
 
 ### c) Tester
-**Actions → Screener CAC 40 quotidien → Run workflow**. Le mail arrive en 1 à 2 minutes.
+**Actions → Screener CAC Small quotidien → Run workflow**. Le mail arrive en 1 à 2 minutes.
 
 Ensuite il part automatiquement **du lundi au vendredi à 18 h 15** (heure de Paris, 19 h 15 en été).
 
@@ -44,7 +44,7 @@ Ensuite il part automatiquement **du lundi au vendredi à 18 h 15** (heure de Pa
 
 ## 2. Comment une valeur est sélectionnée
 
-Une valeur n'est retenue que si elle présente **au moins une configuration** :
+Une valeur n'est retenue que si elle est **assez liquide** (au moins 150 000 € échangés par séance en moyenne sur 20 jours : en dessous, acheter ou revendre peut coûter cher) et présente **au moins une configuration** :
 
 | Configuration | Points |
 |---|---|
@@ -59,9 +59,9 @@ Puis bonus et malus :
 
 | Critère | Points |
 |---|---|
-| Surperforme le CAC 40 d'au moins 5 points sur 3 mois / sous-performe de 10 points | +1 / −1 |
+| Surperforme l'indice d'au moins 5 points sur 3 mois / sous-performe de 10 points | +1 / −1 |
 | MACD qui recroise son signal à la hausse | +1 |
-| Objectif des analystes ≥ 15 % au-dessus du cours (au moins 5 analystes) / déjà dépassé | +1 / −1 |
+| Objectif des analystes ≥ 15 % au-dessus du cours (au moins 3 analystes) / déjà dépassé | +1 / −1 |
 | Consensus des analystes à la vente | −1 |
 | RSI > 72 (surachat) | −2 |
 | MM200 orientée à la baisse, cours en dessous | −1 |
@@ -70,17 +70,26 @@ Puis bonus et malus :
 
 Le **stop indicatif** est placé à 2 ATR (volatilité moyenne sur 14 jours) sous le cours. L'**objectif** reprend le consensus des analystes, ou vise 2 fois le risque pris.
 
-Le mail rappelle aussi la tendance du CAC 40 et la part des valeurs au-dessus de leur MM200. Si le marché est fragile, il le signale.
+Yahoo Finance ne publiant pas l'indice CAC Small, la référence est la **moyenne équipondérée** des valeurs analysées. Le mail rappelle sa tendance et la part des valeurs au-dessus de leur MM200. Si le marché est fragile, il le signale.
 
 ---
+
+## 3. La liste des valeurs (mise à jour automatique)
+
+La liste est dans **`univers.json`**. Chaque lundi matin, le workflow **« Mise à jour de la composition du CAC Small »** la reconstruit et l'enregistre si elle a changé :
+
+1. **Euronext** : le PDF officiel de composition. La version gratuite ne donne que les plus grosses valeurs (37 au 30/09/2026, plus de 80 % du poids de l'indice). La liste complète est réservée aux clients sous licence d'Euronext.
+2. **Wikipédia** : le modèle « Palette CAC Small » liste les autres sociétés de l'indice. Leur ticker Paris est retrouvé automatiquement avec la recherche de Yahoo Finance.
+
+Pour forcer une mise à jour : **Actions → Mise à jour de la composition du CAC Small → Run workflow**. Les sociétés dont le ticker n'a pas été trouvé sont listées dans `univers.json` (`non_trouvees`).
 
 ## 3. Personnaliser
 
 Tout se règle dans **`config.json`** (modifiable sur github.com avec l'icône crayon) :
 
-- `univers` : la liste des 40 valeurs (tickers Yahoo Finance). Euronext révise l'indice en mars, juin, septembre et décembre : mets la liste à jour si une valeur entre ou sort.
+- `indice` : nom de l'indice et ticker Yahoo de la référence (vide = moyenne équipondérée).
 - `selection` : scores minimaux et nombre maximal de valeurs par catégorie.
-- `seuils` : RSI, volume de cassure, fenêtre d'alerte avant résultats, distance du stop.
+- `seuils` : RSI, volume de cassure, fenêtre d'alerte avant résultats, distance du stop, liquidité minimale (`liquidite_min_eur`), nombre minimal d'analystes.
 
 Pour changer la logique, modifie `detect_setups` dans `screener/analysis.py`.
 
@@ -95,7 +104,9 @@ python -m screener --demo --no-email   # données simulées, sans Internet
 ## Structure
 
 ```
-config.json             valeurs du CAC 40, scores et seuils
+config.json             indice de référence, scores et seuils
+univers.json            valeurs du CAC Small (généré automatiquement)
+tools/update_universe.py  mise à jour de univers.json
 screener/data.py        cours et consensus via Yahoo Finance (yfinance)
 screener/analysis.py    indicateurs, configurations, score, sélection
 screener/charts.py      graphique 9 mois (image du mail)

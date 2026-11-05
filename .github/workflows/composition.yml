@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install requests pdfplumber
+      - run: pip install requests pdfplumber yfinance
 
       - name: Lire le PDF de composition d'Euronext
         run: python tools/update_universe.py

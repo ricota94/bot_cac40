@@ -1,1 +1,1 @@
-"""Screener quotidien du CAC 40."""
+"""Screener quotidien des valeurs du CAC Small."""

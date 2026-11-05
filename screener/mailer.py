@@ -8,7 +8,8 @@ from email.message import EmailMessage
 from pathlib import Path
 
 
-def send(subject: str, html_body: str, images: dict[str, bytes], attachment: Path | None = None) -> None:
+def send(subject: str, html_body: str, images: dict[str, bytes], attachment: Path | None = None,
+         sender_name: str = "Screener CAC Small") -> None:
     host = os.environ.get("SMTP_HOST", "smtp.gmail.com")
     port = int(os.environ.get("SMTP_PORT", "465"))
     user = os.environ["SMTP_USER"]
@@ -17,7 +18,7 @@ def send(subject: str, html_body: str, images: dict[str, bytes], attachment: Pat
 
     msg = EmailMessage()
     msg["Subject"] = subject
-    msg["From"] = f"Screener CAC 40 <{user}>"
+    msg["From"] = f"{sender_name} <{user}>"
     msg["To"] = to
     msg.set_content("Ton client mail n'affiche pas le HTML : ouvre la pièce jointe pour lire le rapport.")
     msg.add_alternative(html_body, subtype="html")

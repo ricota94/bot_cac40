@@ -1,0 +1,307 @@
+{
+ "_aide": "Généré automatiquement par tools/update_universe.py (workflow hebdomadaire). Ne pas modifier à la main : la prochaine mise à jour écraserait les changements.",
+ "indice": "CAC Small",
+ "composition_au": "2026-09-30",
+ "sources": [
+  "https://live.euronext.com/sites/default/files/documentation/index-composition/CAC_Small_Index_Composition.pdf"
+ ],
+ "non_trouvees": [],
+ "valeurs": [
+  {
+   "name": "Tikehau Capital",
+   "mnemo": "TKO",
+   "ticker": "TKO.PA",
+   "secteur": "Financials",
+   "poids": 5.83,
+   "source": "Euronext"
+  },
+  {
+   "name": "Interparfums",
+   "mnemo": "ITP",
+   "ticker": "ITP.PA",
+   "secteur": "Consumer Discretionary",
+   "poids": 5.18,
+   "source": "Euronext"
+  },
+  {
+   "name": "Robertet",
+   "mnemo": "RBT",
+   "ticker": "RBT.PA",
+   "secteur": "Basic Materials",
+   "poids": 4.63,
+   "source": "Euronext"
+  },
+  {
+   "name": "Altarea",
+   "mnemo": "ALTA",
+   "ticker": "ALTA.PA",
+   "secteur": "Real Estate",
+   "poids": 4.07,
+   "source": "Euronext"
+  },
+  {
+   "name": "Planisware",
+   "mnemo": "PLNW",
+   "ticker": "PLNW.PA",
+   "secteur": "Technology",
+   "poids": 3.94,
+   "source": "Euronext"
+  },
+  {
+   "name": "Verallia",
+   "mnemo": "VRLA",
+   "ticker": "VRLA.PA",
+   "secteur": "Industrials",
+   "poids": 3.7,
+   "source": "Euronext"
+  },
+  {
+   "name": "Lectra",
+   "mnemo": "LSS",
+   "ticker": "LSS.PA",
+   "secteur": "Technology",
+   "poids": 3.45,
+   "source": "Euronext"
+  },
+  {
+   "name": "Ovh",
+   "mnemo": "OVH",
+   "ticker": "OVH.PA",
+   "secteur": "Technology",
+   "poids": 3.44,
+   "source": "Euronext"
+  },
+  {
+   "name": "Fnac Darty",
+   "mnemo": "FNAC",
+   "ticker": "FNAC.PA",
+   "secteur": "Consumer Discretionary",
+   "poids": 2.77,
+   "source": "Euronext"
+  },
+  {
+   "name": "Stef",
+   "mnemo": "STF",
+   "ticker": "STF.PA",
+   "secteur": "Industrials",
+   "poids": 2.69,
+   "source": "Euronext"
+  },
+  {
+   "name": "Alpes (Compagnie)",
+   "mnemo": "CDA",
+   "ticker": "CDA.PA",
+   "secteur": "Consumer Discretionary",
+   "poids": 2.67,
+   "source": "Euronext"
+  },
+  {
+   "name": "X-Fab",
+   "mnemo": "XFAB",
+   "ticker": "XFAB.PA",
+   "secteur": "Technology",
+   "poids": 2.44,
+   "source": "Euronext"
+  },
+  {
+   "name": "Aubay",
+   "mnemo": "AUB",
+   "ticker": "AUB.PA",
+   "secteur": "Technology",
+   "poids": 2.19,
+   "source": "Euronext"
+  },
+  {
+   "name": "Vetoquinol",
+   "mnemo": "VETO",
+   "ticker": "VETO.PA",
+   "secteur": "Health Care",
+   "poids": 2.13,
+   "source": "Euronext"
+  },
+  {
+   "name": "Quadient",
+   "mnemo": "QDT",
+   "ticker": "QDT.PA",
+   "secteur": "Technology",
+   "poids": 2.12,
+   "source": "Euronext"
+  },
+  {
+   "name": "74Software",
+   "mnemo": "74SW",
+   "ticker": "74SW.PA",
+   "secteur": "Technology",
+   "poids": 1.9,
+   "source": "Euronext"
+  },
+  {
+   "name": "Neurones",
+   "mnemo": "NRO",
+   "ticker": "NRO.PA",
+   "secteur": "Technology",
+   "poids": 1.77,
+   "source": "Euronext"
+  },
+  {
+   "name": "Gl Events",
+   "mnemo": "GLO",
+   "ticker": "GLO.PA",
+   "secteur": "Consumer Discretionary",
+   "poids": 1.77,
+   "source": "Euronext"
+  },
+  {
+   "name": "Pierre Vacances",
+   "mnemo": "VAC",
+   "ticker": "VAC.PA",
+   "secteur": "Consumer Discretionary",
+   "poids": 1.75,
+   "source": "Euronext"
+  },
+  {
+   "name": "Peugeot Invest",
+   "mnemo": "PEUG",
+   "ticker": "PEUG.PA",
+   "secteur": "Financials",
+   "poids": 1.74,
+   "source": "Euronext"
+  },
+  {
+   "name": "Viel Et Compagnie",
+   "mnemo": "VIL",
+   "ticker": "VIL.PA",
+   "secteur": "Financials",
+   "poids": 1.67,
+   "source": "Euronext"
+  },
+  {
+   "name": "Kaufman Et Broad",
+   "mnemo": "KOF",
+   "ticker": "KOF.PA",
+   "secteur": "Consumer Discretionary",
+   "poids": 1.65,
+   "source": "Euronext"
+  },
+  {
+   "name": "Manitou Bf",
+   "mnemo": "MTU",
+   "ticker": "MTU.PA",
+   "secteur": "Industrials",
+   "poids": 1.64,
+   "source": "Euronext"
+  },
+  {
+   "name": "Elior Group",
+   "mnemo": "ELIOR",
+   "ticker": "ELIOR.PA",
+   "secteur": "Consumer Discretionary",
+   "poids": 1.54,
+   "source": "Euronext"
+  },
+  {
+   "name": "Wavestone",
+   "mnemo": "WAVE",
+   "ticker": "WAVE.PA",
+   "secteur": "Technology",
+   "poids": 1.48,
+   "source": "Euronext"
+  },
+  {
+   "name": "Lumibird",
+   "mnemo": "LBIRD",
+   "ticker": "LBIRD.PA",
+   "secteur": "Health Care",
+   "poids": 1.43,
+   "source": "Euronext"
+  },
+  {
+   "name": "Abc Arbitrage",
+   "mnemo": "ABCA",
+   "ticker": "ABCA.PA",
+   "secteur": "Financials",
+   "poids": 1.43,
+   "source": "Euronext"
+  },
+  {
+   "name": "Assystem",
+   "mnemo": "ASY",
+   "ticker": "ASY.PA",
+   "secteur": "Industrials",
+   "poids": 1.36,
+   "source": "Euronext"
+  },
+  {
+   "name": "Antin Infra Partn",
+   "mnemo": "ANTIN",
+   "ticker": "ANTIN.PA",
+   "secteur": "Financials",
+   "poids": 1.32,
+   "source": "Euronext"
+  },
+  {
+   "name": "Smcp",
+   "mnemo": "SMCP",
+   "ticker": "SMCP.PA",
+   "secteur": "Consumer Discretionary",
+   "poids": 1.3,
+   "source": "Euronext"
+  },
+  {
+   "name": "Nexity",
+   "mnemo": "NXI",
+   "ticker": "NXI.PA",
+   "secteur": "Consumer Discretionary",
+   "poids": 1.28,
+   "source": "Euronext"
+  },
+  {
+   "name": "Beneteau",
+   "mnemo": "BEN",
+   "ticker": "BEN.PA",
+   "secteur": "Consumer Discretionary",
+   "poids": 1.27,
+   "source": "Euronext"
+  },
+  {
+   "name": "Infotel",
+   "mnemo": "INF",
+   "ticker": "INF.PA",
+   "secteur": "Technology",
+   "poids": 1.19,
+   "source": "Euronext"
+  },
+  {
+   "name": "Seche Environnem.",
+   "mnemo": "SCHP",
+   "ticker": "SCHP.PA",
+   "secteur": "Utilities",
+   "poids": 1.18,
+   "source": "Euronext"
+  },
+  {
+   "name": "Sword Group",
+   "mnemo": "SWP",
+   "ticker": "SWP.PA",
+   "secteur": "Technology",
+   "poids": 1.13,
+   "source": "Euronext"
+  },
+  {
+   "name": "North Atlantic En.",
+   "mnemo": "NAE",
+   "ticker": "NAE.PA",
+   "secteur": "Energy",
+   "poids": 1.1,
+   "source": "Euronext"
+  },
+  {
+   "name": "Totalenergiesgabon",
+   "mnemo": "EC",
+   "ticker": "EC.PA",
+   "secteur": "Energy",
+   "poids": 1.03,
+   "source": "Euronext"
+  }
+ ]
+}
