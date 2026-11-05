@@ -4,12 +4,12 @@ Le même gabarit sert à l'e-mail (images en pièces jointes intégrées, « cid
 archivé (images en base64, lisible hors ligne)."""
 from __future__ import annotations
 
-import base64
 from datetime import datetime
 from html import escape
 from typing import Callable
 
 from .analysis import Stock, pct
+from .interactive import SCRIPT
 
 UP, DOWN, INK, MUTED, LINE = "#0f8a5f", "#c8372d", "#1d2433", "#6b7487", "#e7eaf0"
 CAT = {"achat": ("Achat à étudier", "#e6f4ee", UP), "surveiller": ("À surveiller", "#fff4e0", "#a05a00")}
@@ -39,7 +39,7 @@ def _kpi(label: str, value: str, color: str = INK) -> str:
             f'<div style="font-weight:600;color:{color};white-space:nowrap">{value}</div></td>')
 
 
-def _card(s: Stock, img_src: str) -> str:
+def _card(s: Stock, chart: str) -> str:
     label, bg, fg = CAT[s.category]
     d = s.details
     kpis = [
@@ -80,13 +80,14 @@ def _card(s: Stock, img_src: str) -> str:
    <div style="color:{col(s.day_pct)};font-weight:600">{sgn(s.day_pct, 2)}</div></td>
  </tr></table>
  <table role="presentation" style="width:100%;border-collapse:separate;border-spacing:4px;margin-top:8px;font-size:13px"><tr>{''.join(kpis)}</tr><tr>{''.join(kpis2)}</tr></table>
- <img src="{img_src}" alt="Graphique {escape(s.name)}" width="560" style="width:100%;max-width:560px;height:auto;display:block;margin:8px 0">
+ {chart}
  <ul style="margin:4px 0 0;padding-left:18px;font-size:13px">{warn}{why}</ul>{funda_html}
 </div>"""
 
 
 def build(selected: list[Stock], ctx: dict, n_total: int, errors: list[str], now: datetime,
-          img_src: Callable[[Stock], str]) -> str:
+          chart: Callable[[Stock], str], interactive: bool = False) -> str:
+    """chart(s) renvoie le code HTML du graphique de la valeur s (image ou graphique interactif)."""
     buys = [s for s in selected if s.category == "achat"]
     watch = [s for s in selected if s.category == "surveiller"]
 
@@ -108,7 +109,7 @@ def build(selected: list[Stock], ctx: dict, n_total: int, errors: list[str], now
             return ""
         return (f"<h3 style='font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:{MUTED};margin:26px 0 4px'>"
                 f"{title} ({len(items)})</h3><p style='margin:0 0 10px;font-size:13px;color:{MUTED}'>{intro}</p>"
-                + "".join(_card(s, img_src(s)) for s in items))
+                + "".join(_card(s, chart(s)) for s in items))
 
     body = section("Achat à étudier", buys,
                    "Configuration technique favorable et score élevé. À valider avec l'actualité de la société.")
@@ -120,19 +121,29 @@ def build(selected: list[Stock], ctx: dict, n_total: int, errors: list[str], now
 
     err = (f"<p style='color:{DOWN};font-size:12px'>Valeurs non récupérées : {escape(', '.join(errors))}</p>"
            if errors else "")
+    if not selected:
+        hint = ""
+    elif interactive:
+        hint = (f"<p style='margin:10px 0 0;font-size:12px;color:{MUTED}'>Passe la souris (ou le doigt) sur un graphique "
+                "pour voir le cours exact à chaque date.</p>")
+    else:
+        hint = (f"<p style='margin:10px 0 0;font-size:12px;color:{MUTED}'>Graphiques interactifs (cours exact à chaque "
+                "date) : télécharge la pièce jointe et ouvre-la dans ton navigateur.</p>")
     return f"""<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Screener CAC 40 du {now:%d/%m/%Y}</title></head>
 <body style="margin:0;background:#f6f7fa">
 <div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:{INK};max-width:640px;margin:0 auto;padding:20px 14px;font-size:14px;line-height:1.45">
 <h2 style="margin:0 0 4px">Screener CAC 40 : {now:%d/%m/%Y}</h2>
 <p style="margin:0 0 12px;color:{MUTED}">{n_total} valeurs analysées · <b style="color:{INK}">{len(buys)} achat(s) à étudier</b>, {len(watch)} à surveiller · les autres sont écartées</p>
-<p style="margin:0;font-size:13px">{market}</p>{prudence}
+<p style="margin:0;font-size:13px">{market}</p>{prudence}{hint}
 {body}{err}
 <p style="margin-top:22px;font-size:12px;color:#8a93a6">Sélection automatique à partir d'indicateurs techniques (MM50/MM200, RSI, MACD, volumes,
 force relative) et du consensus des analystes (Yahoo Finance). Le stop est placé à 2 ATR sous le cours, l'objectif reprend le consensus
 ou vise 2 fois le risque. Ce ne sont pas des conseils financiers : vérifie l'actualité avant tout achat.</p>
-</div></body></html>"""
+</div>{SCRIPT if interactive and selected else ""}</body></html>"""
 
 
-def data_uri(png: bytes) -> str:
-    return "data:image/png;base64," + base64.b64encode(png).decode()
+def img_tag(src: str, name: str) -> str:
+    return (f'<img src="{src}" alt="Graphique {escape(name)}" width="560" '
+            'style="width:100%;max-width:560px;height:auto;display:block;margin:8px 0">')
+

@@ -11,7 +11,8 @@ from zoneinfo import ZoneInfo
 from . import analysis as an
 from .charts import trend_png
 from .data import fake_all, fake_details, fetch_all, fetch_details
-from .report import build, data_uri
+from .interactive import chart_html
+from .report import build, img_tag
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -71,7 +72,9 @@ def main() -> int:
     out_dir = ROOT / "reports"
     out_dir.mkdir(exist_ok=True)
     report_path = out_dir / f"screener_cac40_{now:%Y-%m-%d}.html"
-    report_path.write_text(build(selected, ctx, len(stocks), errors, now, lambda s: data_uri(pngs[s.ticker])),
+    # Fichier joint : graphiques interactifs (survol = cours exact à la date). Corps du mail : images PNG.
+    report_path.write_text(build(selected, ctx, len(stocks), errors, now,
+                                 lambda s: chart_html(frames[s.ticker], s.stop, cid(s)), interactive=True),
                            encoding="utf-8")
     print(f"Rapport : {report_path} ({len(buys)} achat(s), {len(watch)} à surveiller)")
 
@@ -86,7 +89,7 @@ def main() -> int:
         subject = f"CAC 40 {now:%d/%m} : {len(watch)} valeur(s) à surveiller"
     else:
         subject = f"CAC 40 {now:%d/%m} : rien d'intéressant ce soir"
-    html = build(selected, ctx, len(stocks), errors, now, lambda s: f"cid:{cid(s)}")
+    html = build(selected, ctx, len(stocks), errors, now, lambda s: img_tag(f"cid:{cid(s)}", s.name))
     send(subject, html, {cid(s): pngs[s.ticker] for s in selected}, report_path)
     print("E-mail envoyé.")
     return 0
