@@ -9,6 +9,8 @@ Les autres valeurs sont écartées. S'il n'y a rien d'intéressant, le mail le d
 
 Pour chaque valeur retenue : cours, raisons de la sélection, graphique sur 9 mois (moyennes mobiles 50/200 jours), stop et objectif indicatifs, consensus des analystes, alerte si les résultats tombent dans les 10 jours.
 
+Le mail contient les graphiques en image. Le **rapport en pièce jointe** (fichier `.html` à ouvrir dans ton navigateur) a les mêmes graphiques en version **interactive** : en passant la souris (ou le doigt) sur la courbe, tu vois la date, le cours de clôture exact, la variation de la séance et les moyennes mobiles.
+
 Il tourne gratuitement sur **GitHub Actions** : rien à laisser allumé.
 
 > ⚠️ Sélection automatique fondée sur des indicateurs techniques et le consensus des analystes. Ce sont des pistes à étudier, pas des conseils financiers.
@@ -96,7 +98,8 @@ python -m screener --demo --no-email   # données simulées, sans Internet
 config.json             valeurs du CAC 40, scores et seuils
 screener/data.py        cours et consensus via Yahoo Finance (yfinance)
 screener/analysis.py    indicateurs, configurations, score, sélection
-screener/charts.py      graphique 9 mois
+screener/charts.py      graphique 9 mois (image du mail)
+screener/interactive.py graphique interactif du rapport joint
 screener/report.py      e-mail / rapport HTML (valeurs retenues uniquement)
 screener/mailer.py      envoi SMTP, graphiques intégrés au mail
 .github/workflows/      planification quotidienne
