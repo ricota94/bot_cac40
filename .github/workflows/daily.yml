@@ -1,0 +1,38 @@
+name: Screener CAC 40 quotidien
+
+on:
+  schedule:
+    # Du lundi au vendredi à 17:15 UTC = 18:15 à Paris (hiver) / 19:15 (été),
+    # après la clôture d'Euronext Paris (17:35). GitHub peut décaler l'exécution de quelques minutes.
+    - cron: "15 17 * * 1-5"
+  workflow_dispatch: {}   # bouton "Run workflow" pour lancer à la main
+
+jobs:
+  screener:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Screener et envoi du rapport
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: python -m screener
+
+      - name: Archiver le rapport (30 jours)
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: screener-${{ github.run_id }}
+          path: reports/*.html
+          retention-days: 30
+          if-no-files-found: ignore
