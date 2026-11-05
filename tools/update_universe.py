@@ -25,6 +25,14 @@ UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, 
 MIN_OFFICIAL = 20                     # en dessous, on considère la lecture du PDF ratée
 WIKI_API = "https://fr.wikipedia.org/w/api.php"
 WIKI_TEMPLATE = "Modèle:Palette CAC Small"
+# Sociétés que la recherche Yahoo ne retrouve pas par leur nom Wikipédia (vérifiées au lancement :
+# un ticker sans cotation est simplement signalé dans le rapport).
+ALIASES = {
+    "Avenir Télécom": "AVT.PA", "Bastide Le Confort médical": "BLC.PA", "Groupe Casino": "CO.PA",
+    "Groupe Latecoere": "LAT.PA", "HighCo": "HCO.PA", "Jacquet Metals Service": "JCQ.PA",
+    "Plastivaloire": "PVL.PA", "Showroomprive.com": "SRP.PA", "Tonnellerie François Frères": "TFF.PA",
+    "Vranken-Pommery Monopole": "VRAP.PA",
+}
 NOT_COMPANIES = re.compile(r"^(CAC|SBF|Euronext|Indice|Portail|Bourse|Liste|France)\b", re.I)
 MOIS_EN = ["january", "february", "march", "april", "may", "june", "july", "august",
            "september", "october", "november", "december"]
@@ -106,7 +114,33 @@ def wikipedia_names() -> list[str]:
     return [re.sub(r"\s*\(.*?\)$", "", n) for n in names if not NOT_COMPANIES.match(n)]
 
 
+def key(name: str) -> str:
+    """Nom simplifié pour comparer « Groupe SMCP » et « Smcp », « Séché Environnement » et « Seche Environnem. »."""
+    import unicodedata
+    n = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode().lower()
+    n = re.sub(r"\b(groupe|group|sa|se|compagnie|cie|et|the|des|de|du|la|le)\b|&|\(.*?\)|\.com", " ", n)
+    return re.sub(r"[^a-z0-9]", "", n)
+
+
+def same_company(a: str, b: str) -> bool:
+    ka, kb = key(a), key(b)
+    return bool(ka and kb) and min(len(ka), len(kb)) >= 3 and (ka.startswith(kb) or kb.startswith(ka))
+
+
 def yahoo_ticker(name: str) -> tuple[str, str] | None:
+    """Essaie le nom tel quel, puis des variantes simplifiées."""
+    variants = [name, re.sub(r"^Groupe\s+", "", name), name.replace("&", "et"),
+                re.sub(r"\.com$|\s+(SA|SE|Group|Groupe)$", "", name)]
+    for v in dict.fromkeys(variants):
+        found = _search(v)
+        if found:
+            return found
+    if name in ALIASES:
+        return ALIASES[name], ""
+    return None
+
+
+def _search(name: str) -> tuple[str, str] | None:
     """Cherche le ticker Paris (.PA) d'une société par son nom via la recherche Yahoo Finance."""
     import yfinance as yf
     try:
@@ -148,6 +182,8 @@ def main() -> int:
     print(f"Wikipédia : {len(names)} sociétés")
     unresolved = []
     for n in names:
+        if any(same_company(n, v["name"]) for v in official):
+            continue                                   # déjà dans la liste officielle
         found = yahoo_ticker(n)
         if not found:
             unresolved.append(n)
