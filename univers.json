@@ -7,6 +7,7 @@
   "https://fr.wikipedia.org/wiki/Modèle:Palette_CAC_Small"
  ],
  "non_trouvees": [
+  "Aramis Group",
   "European Gas Limited",
   "Orège"
  ],
@@ -343,14 +344,6 @@
    "name": "Akwel",
    "mnemo": "AKW",
    "ticker": "AKW.PA",
-   "secteur": "Consumer Cyclical",
-   "poids": null,
-   "source": "Wikipédia"
-  },
-  {
-   "name": "Aramis Group",
-   "mnemo": "ARAMI",
-   "ticker": "ARAMI.PA",
    "secteur": "Consumer Cyclical",
    "poids": null,
    "source": "Wikipédia"
